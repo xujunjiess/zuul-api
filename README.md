@@ -1,2 +1,2 @@
 # zuul-api
-- zull网关
+- zuul网关
