@@ -1,0 +1,66 @@
+server:
+  port: 7878
+
+spring:
+  application:
+    name: zuul-api
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+  security:
+    user:
+      name: admin
+      password: 123
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${eureka_url:http://admin:123@localhost:6868/eureka/}
+
+
+zuul:
+  retryable: true
+  ignoredServices: '*'
+  prefix: /pdd
+  routes:
+    users-api:
+      path: /us/**
+      serviceId: users-api
+#    product-api:
+#      path: /pd/**
+#      serviceId: product-api
+
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 80000
+
+ribbon:
+  ReadTimeout: 2000
+  ConnectTimeout: 2000
+  OkToRetryOnAllOperations: true
+  MaxAutoRetries: 3
+  MaxAutoRetriesNextServer: 1
+  eureka:
+    enabled: true
+#feign:
+#  hystrix:
+#    enabled: true
+
+zuul.add-host-header: true
+
+
